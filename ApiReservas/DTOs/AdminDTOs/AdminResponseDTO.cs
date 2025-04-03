@@ -9,7 +9,7 @@ namespace ApiReservas.DTOs.AuthDTOs
         public string Email { get; set; }
         public string Birthdate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; }
 
         public AdminResponseDTO(Admin user)
         {
