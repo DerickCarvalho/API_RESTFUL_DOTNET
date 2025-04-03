@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiReservas.Models
 {
-    public class User
+    public class Admin
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,7 +14,12 @@ namespace ApiReservas.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        [Column(TypeName = "date")]
+        public DateTime Birthdate { get; set; }
+
         public DateTime CreatedDate { get; set; }
-        public bool IsActive { get; set; }
+        [Required]
+        public bool IsAdmin { get; set; }
     }
 }
