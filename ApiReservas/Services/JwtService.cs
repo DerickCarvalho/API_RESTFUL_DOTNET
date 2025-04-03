@@ -18,7 +18,7 @@ namespace ApiReservas.Services
             _audience = config["Jwt:Audience"];
         }
 
-        public string GenerateToken(string username)
+        public string GenerateToken(string username, bool isAdmin)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_key);
@@ -27,7 +27,8 @@ namespace ApiReservas.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim("IsAdmin", isAdmin.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(3), // Deixando o token valido por 3h
                 Issuer = _issuer,
