@@ -71,7 +71,7 @@ namespace ApiReservas.Controllers
             else
             {
                 var token = _jwtService.GenerateToken(admin.Email, admin.IsAdmin);
-                return Ok(new { message = "Usuário logado com sucesso!", token });
+                return Ok(new { message = "Admin logado com sucesso!", token });
             }
         }
 

@@ -16,5 +16,7 @@ namespace ApiReservas.Models
         public int PeopleCapacity { get; set; }
         [Required]
         public bool isActive { get; set; }
+
+        public ICollection<Reservations> Reservations { get; set; }
     }
 }

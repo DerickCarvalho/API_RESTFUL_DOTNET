@@ -2,15 +2,11 @@
 
 namespace ApiReservas.DTOs.UserDTOs
 {
-    public class RegisterUserDTO
+    public class LoginUserDTO
     {
-        [Required]
-        public string Name { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-        [Required]
-        public bool isActive { get; set; }
     }
 }
