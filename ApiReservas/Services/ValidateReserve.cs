@@ -79,9 +79,6 @@ namespace ApiReservas.Services
                     r.IsActive
                 );
 
-            var roomIsDisponible = false;
-            var reservationInSameHour = true;
-
             if (reservation != null)
             {
                 return new ValidateReserveDTO 
@@ -90,10 +87,6 @@ namespace ApiReservas.Services
                     Message = "Já existe uma reserva para essa sala no horário informado!",  
                     Type = Enums.ResponseType.Conflict 
                 };
-            }
-            else
-            {
-                reservationInSameHour = false;
             }
 
             if (room == null || !room.isActive)
@@ -107,10 +100,6 @@ namespace ApiReservas.Services
             }
 
             if (reservationDTO.QtdPeoples <= room.PeopleCapacity)
-            {
-                roomIsDisponible = true;
-            }
-            else
             {
                 return new ValidateReserveDTO
                 {
