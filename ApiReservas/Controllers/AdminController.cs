@@ -75,35 +75,6 @@ namespace ApiReservas.Controllers
             }
         }
 
-        [HttpPost("criar_usuario")]
-        [Authorize]
-        [AdminOnly]
-        public async Task<IActionResult> AddUser(RegisterUserDTO userDTO)
-        {
-            var user = new User
-            {
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Password = userDTO.Password,
-                CreatedDate = DateTime.UtcNow,
-                IsActive = true
-            };
-
-            var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
-            var userIsAdmin = await _context.Admins.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
-
-            if (userExists != null || userIsAdmin != null)
-            {
-                return Conflict(new { message = $"Cadastro com e-mail {userDTO.Email} já existe no sistema!" });
-            }
-
-            user.Password = _encPassword.EncriptPassword(userDTO.Password);
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Usuário cadastrado com sucesso!" });
-        }
-
         [HttpPut("editar_usuario/{id}")]
         [Authorize]
         [AdminOnly]
@@ -121,7 +92,7 @@ namespace ApiReservas.Controllers
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Usuário editado com sucesso!", userDTO});
+            return Ok(new { message = "Usuário editado com sucesso!", userDTO });
         }
 
         [HttpDelete("inativar_usuario/{id}")]

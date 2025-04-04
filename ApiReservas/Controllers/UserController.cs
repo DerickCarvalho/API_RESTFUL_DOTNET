@@ -1,7 +1,10 @@
 ﻿using ApiReservas.Data;
 using ApiReservas.DTOs.UserDTOs;
+using ApiReservas.Middleware;
 using ApiReservas.Middlewares;
+using ApiReservas.Models;
 using ApiReservas.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +27,33 @@ namespace ApiReservas.Controllers
         }
         #endregion
 
+        [HttpPost("cadastrar")]
+        public async Task<IActionResult> AddUser(RegisterUserDTO userDTO)
+        {
+            var user = new User
+            {
+                Name = userDTO.Name,
+                Email = userDTO.Email,
+                Password = userDTO.Password,
+                CreatedDate = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var userExists = await _context.Users.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
+            var userIsAdmin = await _context.Admins.FirstOrDefaultAsync(u => u.Email == userDTO.Email);
+
+            if (userExists != null || userIsAdmin != null)
+            {
+                return Conflict(new { message = $"Cadastro com e-mail {userDTO.Email} já existe no sistema!" });
+            }
+
+            user.Password = _encPassword.EncriptPassword(userDTO.Password);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Usuário cadastrado com sucesso!" });
+        }
+        
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserDTO loginDTO)
         {
@@ -43,6 +73,7 @@ namespace ApiReservas.Controllers
         }
 
         [HttpPut("mudar_senha")]
+        [Authorize]
         [UserOnly]
         public async Task<IActionResult> ModifyPassword(EditUserPasswordDTO loginDTO)
         {

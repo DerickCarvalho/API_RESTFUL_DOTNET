@@ -117,7 +117,6 @@ namespace ApiReservas.Controllers
         }
 
         [HttpGet("listar_salas_ativas")]
-        [AdminOnly]
         public async Task<IActionResult> ListActiveRooms()
         {
             var rooms = await _context.Rooms
