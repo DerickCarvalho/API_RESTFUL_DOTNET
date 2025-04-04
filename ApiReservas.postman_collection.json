@@ -1,0 +1,742 @@
+{
+	"info": {
+		"_postman_id": "90f20bef-6bc7-4776-a575-4e3f3ffb8522",
+		"name": "ApiReservas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33930064"
+	},
+	"item": [
+		{
+			"name": "ADMIN",
+			"item": [
+				{
+					"name": "CADASTRO ADM",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Derick Carvalho\",\r\n  \"email\": \"derickcarvalho95@gmail.com\",\r\n  \"password\": \"Senha123#\",\r\n  \"birthdate\": \"2025-04-03\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/admins/cadastrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"cadastrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN ADM",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"derickcarvalho95@gmail.com\",\r\n  \"password\": \"Senha123#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/admins/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDITAR USUARIO",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"João\",\r\n  \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/admins/editar_usuario/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"editar_usuario",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INATIVAR USUARIO",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/admins/inativar_usuario/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"inativar_usuario",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR USUARIOS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/admins/listar_usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"listar_usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR USUARIOS ATIVOS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/admins/listar_usuarios_ativos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"admins",
+								"listar_usuarios_ativos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SALAS",
+			"item": [
+				{
+					"name": "CRIAR SALA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"roomName\": \"Sala Reuniões 03\",\r\n  \"peopleCapacity\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/salas/criar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"salas",
+								"criar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDITAR SALA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"roomName\": \"Reuniões 02\",\r\n  \"isActive\": true,\r\n  \"peopleCapacity\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/salas/editar/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"salas",
+								"editar",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INATIVAR SALA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/salas/inativar/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"salas",
+								"inativar",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR SALAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc5MTEzMywiZXhwIjoxNzQzODAxOTMzLCJpYXQiOjE3NDM3OTExMzMsImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.UF808VzNohYeUsIYYaJBHwxFrccEYQSueqjF7GX7gGE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/salas/listar_salas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"salas",
+								"listar_salas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR SALAS ATIVAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3ODU5NjMsImV4cCI6MTc0Mzc5Njc2MywiaWF0IjoxNzQzNzg1OTYzLCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.ItaJaHRRxMMZv_hWxcuBmqkzAn_YQkhuqcQKHsISjsk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/salas/listar_salas_ativas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"salas",
+								"listar_salas_ativas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RESERVAS",
+			"item": [
+				{
+					"name": "CADASTRAR RESERVA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": 4,\r\n  \"roomId\": 3,\r\n  \"qtdPeoples\": 10,\r\n  \"startAt\": \"2025-04-06T11:02:44.704Z\",\r\n  \"endAt\": \"2025-04-06T14:02:44.704Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/reservar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"reservar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDITAR RESERVA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roomId\": 4,\r\n    \"qtdPeoples\": 4,\r\n    \"startAt\": \"2025-04-06T11:02:44.704Z\",\r\n    \"endAt\": \"2025-04-06T14:02:44.704Z\",\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/editar/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"editar",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EXCLUIR RESERVA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/inativar/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"inativar",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR RESERVAS [ADM]",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImRlcmlja2NhcnZhbGhvOTVAZ21haWwuY29tIiwiSXNBZG1pbiI6IlRydWUiLCJuYmYiOjE3NDM3NzQ4NzcsImV4cCI6MTc0Mzc4NTY3NywiaWF0IjoxNzQzNzc0ODc3LCJpc3MiOiJBcGlSZXNlcnZhcyIsImF1ZCI6IkFwSVJlc2VydmFzVXNlcnMifQ.cZtwGjPMbEo07oUvhZ8Ip2U5eVT9sd4iuCnzgFXJSkk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/listar_reservas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"listar_reservas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR RESERVAS ATIVAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/listar_reservas_ativas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"listar_reservas_ativas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR RESERVAS FILTRADAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5020/api/reservas/listar_reservas_filtradas?UserId=4&RoomId=4&ReservDate=2025-04-06T00:00:00.000Z&IsActive=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"reservas",
+								"listar_reservas_filtradas"
+							],
+							"query": [
+								{
+									"key": "UserId",
+									"value": "4"
+								},
+								{
+									"key": "RoomId",
+									"value": "4"
+								},
+								{
+									"key": "ReservDate",
+									"value": "2025-04-06T00:00:00.000Z"
+								},
+								{
+									"key": "IsActive",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USUARIOS",
+			"item": [
+				{
+					"name": "CADASTRAR",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Paulo\",\r\n  \"email\": \"paulo@gmail.com\",\r\n  \"password\": \"senha123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/usuarios/cadastrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"usuarios",
+								"cadastrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"joaoneto@gmail.com\",\r\n  \"password\": \"Batata123#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/usuarios/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MUDAR SENHA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvYW9uZXRvQGdtYWlsLmNvbSIsIklzQWRtaW4iOiJGYWxzZSIsIm5iZiI6MTc0Mzc4NjQyOSwiZXhwIjoxNzQzNzk3MjI5LCJpYXQiOjE3NDM3ODY0MjksImlzcyI6IkFwaVJlc2VydmFzIiwiYXVkIjoiQXBJUmVzZXJ2YXNVc2VycyJ9.wzJfjlCLA82AusfdQnj1x3kDvKAFkj4CvLWCuRPSRUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"joaoneto@gmail.com\",\r\n  \"password\": \"senha123\",\r\n  \"newPassword\": \"Batata123#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5020/api/usuarios/mudar_senha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5020",
+							"path": [
+								"api",
+								"usuarios",
+								"mudar_senha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
