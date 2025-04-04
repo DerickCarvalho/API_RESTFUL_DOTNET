@@ -36,6 +36,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<EncPassword>();
+builder.Services.AddScoped<ValidateUser>();
+builder.Services.AddScoped<ValidateReserve>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

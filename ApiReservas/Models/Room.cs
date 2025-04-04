@@ -11,12 +11,10 @@ namespace ApiReservas.Models
         [Required]
         public string RoomName { get; set; }
         [Required]
-        public int CapacityInHours { get; set; }
-        [Required]
         public int PeopleCapacity { get; set; }
         [Required]
         public bool isActive { get; set; }
 
-        public ICollection<Reservations> Reservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

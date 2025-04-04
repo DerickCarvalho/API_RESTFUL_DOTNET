@@ -16,5 +16,6 @@ namespace ApiReservas.Models
         public string Password { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

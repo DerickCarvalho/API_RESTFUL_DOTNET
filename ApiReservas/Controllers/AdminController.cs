@@ -40,7 +40,7 @@ namespace ApiReservas.Controllers
                 Password = adminDto.Password,
                 Birthdate = adminDto.Birthdate.Date,
                 CreatedDate = DateTime.UtcNow,
-                IsAdmin = true
+                IsAdmin = false
             };
 
             var adminExists = await _context.Admins.FirstOrDefaultAsync(u => u.Email == adminDto.Email);

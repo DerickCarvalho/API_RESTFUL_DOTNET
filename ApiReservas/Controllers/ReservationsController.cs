@@ -1,8 +1,11 @@
 ﻿using ApiReservas.Data;
 using ApiReservas.DTOs.ReservationDTOs;
 using ApiReservas.DTOs.RoomsDTOs;
+using ApiReservas.Middleware;
+using ApiReservas.Middlewares;
 using ApiReservas.Models;
 using ApiReservas.Services;
+using ApiReservas.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,124 +21,200 @@ namespace ApiReservas.Controllers
         private readonly ApplicationDbContext _context;
         private readonly JwtService _jwtService;
         private readonly EncPassword _encPassword;
+        private readonly ValidateReserve _validateReserve;
+        private readonly ValidateUser _validateUser;
 
         public ReservationsController
         (
             ApplicationDbContext context, 
             JwtService jwtService, 
-            EncPassword encPassword
+            EncPassword encPassword,
+            ValidateReserve validateReserve,
+            ValidateUser validateUser
         )
         {
             _context = context;
             _jwtService = jwtService;
             _encPassword = encPassword;
+            _validateReserve = validateReserve;
+            _validateUser = validateUser;
         }
         #endregion
 
         [HttpPost("reservar")]
+        [UserOnly]
         public async Task<IActionResult> NewReservation(CreateReservationDTO reservationDTO)
         {
-            #region VALIDANDO DATA DA RESERVA
-
-            DateTime now = DateTime.UtcNow;
-            DateTime today = now.Date;
-
-            if (reservationDTO.StartAt < now)
-            {
-                return BadRequest(new { message = "Data de início não pode ser no passado!" });
-            }
-
-            if (reservationDTO.EndAt < now)
-            {
-                return BadRequest(new { message = "Data final não pode ser no passado!" });
-            }
-
-            if (reservationDTO.StartAt.Date != today || reservationDTO.EndAt.Date != today)
-            {
-                return BadRequest(new { message = "Reservas só podem ser feitas para o dia atual!" });
-            }
-
-            if (reservationDTO.EndAt <= reservationDTO.StartAt)
-            {
-                return BadRequest(new { message = "A data final deve ser após à data inicial!" });
-            }
-
-            #endregion
-
-            #region VERIFICAR SE A SALA TEM DISPONIBILIDADE
-
-            var room = await _context.Rooms.FindAsync(reservationDTO.RoomId);
-
-            var reservation = await _context
-                .Reservations
-                .FirstOrDefaultAsync
-                (r => 
-                    r.RoomId == reservationDTO.RoomId &&
-                    r.IsActive &&
-                    r.StartAt < reservationDTO.EndAt &&
-                    r.EndAt > reservationDTO.StartAt
-                );
-
-            var roomIsDisponible = false;
-            var reservationInSameHour = true;
-            var qtdHours = (reservationDTO.EndAt - reservationDTO.StartAt).Hours;
-
-            if (reservation != null)
-            {
-                return Conflict(new { message = "Já existe uma reserva para essa sala no horário informado!" });
-            }
-            else
-            {
-                reservationInSameHour = false;
-            }
-
-            if (room.isActive == false || room == null)
-            {
-                return NotFound(new { message = "Sala não encontrada ou indisponível!" });
-            }
-
-            if (room.CapacityInHours > 0 && reservationDTO.QtdPeoples < room.PeopleCapacity && room.CapacityInHours < qtdHours)
-            {
-                roomIsDisponible = true;
-            }
-            else
-            {
-                return Conflict(new { message = "A sala está indisponível para essa quantidade de pessoas ou está sem horário livre" });
-            }
-
-            #endregion
+            var validateReserve = await _validateReserve.Validate(reservationDTO);
+            var userIsValid = await _validateUser.Validate(reservationDTO.UserId);
 
             #region CRIANDO A RESERVA
 
-            if (roomIsDisponible && !reservationInSameHour)
+            if (!userIsValid.IsValidated) 
             {
-
-                var newReservation = new Reservations
-                {
-                    UserId = reservationDTO.UserId,
-                    RoomId = reservationDTO.RoomId,
-                    QtdPeoples = reservationDTO.QtdPeoples,
-                    StartAt = reservationDTO.StartAt,
-                    EndAt = reservationDTO.EndAt,
-                    IsActive = true
-                };
-
-
-                room.RoomName = room.RoomName;
-                room.CapacityInHours = (room.CapacityInHours - qtdHours);
-                room.PeopleCapacity = (room.PeopleCapacity - reservationDTO.QtdPeoples);
-
-                _context.Rooms.Update(room);
-                _context.Reservations.Add(newReservation);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Reserva criada com sucesso!", newReservation });
+                return userIsValid.ToActionResultUser(this);
             }
-            else
+
+            if (!validateReserve.IsDisponible) 
             {
-                return Conflict(new { message = "A sala está indisponível para essa quantidade de pessoas ou está sem horário livre" });
-            }
+                return validateReserve.ToActionResultReserve(this);
+            }            
+
+            var newReservation = new Reservation
+            {
+                UserId = reservationDTO.UserId,
+                RoomId = reservationDTO.RoomId,
+                QtdPeoples = reservationDTO.QtdPeoples,
+                StartAt = reservationDTO.StartAt,
+                EndAt = reservationDTO.EndAt,
+                IsActive = true
+            };
+
+            _context.Reservations.Add(newReservation);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Reserva criada com sucesso!" });
 
             #endregion
+        }
+
+        [HttpPut("editar/{id}")]
+        public async Task<IActionResult> EditReservation(int id, EditReservationDTO reservationDTO)
+        {
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            if (reservation == null)
+            {
+                return BadRequest(new { message = "Reserva não encontrada!" });
+            }
+
+            var validateNewReserve = await _validateReserve.ValidateToEdit(reservationDTO);
+            var userIsValid = await _validateUser.Validate(reservation.UserId);
+
+            #region EDITANDO A RESERVA
+
+            if (!userIsValid.IsValidated)
+            {
+                return userIsValid.ToActionResultUser(this);
+            }
+
+            if (!validateNewReserve.IsDisponible)
+            {
+                return validateNewReserve.ToActionResultReserve(this);
+            }
+
+            reservation.RoomId = reservationDTO.RoomId;
+            reservation.QtdPeoples = reservationDTO.QtdPeoples;
+            reservation.StartAt = reservationDTO.StartAt;
+            reservation.EndAt = reservationDTO.EndAt;
+            reservation.IsActive = true;
+
+            _context.Reservations.Update(reservation);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Reserva editada com sucesso!" });
+
+            #endregion
+        }
+
+        [HttpDelete("inativar/{id}")]
+        public async Task<IActionResult> InativeReservation(int id)
+        {
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            if (reservation == null)
+            {
+                return NotFound(new { message = "Reserva não encontrada!" });
+            }
+
+            var qtdHours = (int)Math.Ceiling((reservation.EndAt - reservation.StartAt).TotalHours);
+
+            reservation.IsActive = false;
+
+            _context.Reservations.Update(reservation);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Reserva inativada com sucesso!" });
+        }
+
+        [HttpGet("listar_reservas")]
+        [AdminOnly]
+        public async Task<IActionResult> ListReservations()
+        {
+            var reservations = await _context.Reservations.Select(r => new ReservationResponseDTO
+            {
+                Id = r.Id,
+                UserId = r.UserId,
+                RoomId = r.RoomId,
+                QtdPeoples = r.QtdPeoples,
+                StartAt = r.StartAt,
+                EndAt = r.EndAt,
+                IsActive = r.IsActive
+            })
+            .ToListAsync();
+
+            return Ok(reservations);
+        }
+
+        [HttpGet("listar_reservas_ativas")]
+        public async Task<IActionResult> ListActiveReservations()
+        {
+            var reservations = await _context.Reservations
+            .Where(r => r.IsActive)
+            .Select(r => new ReservationResponseDTO
+            {
+                Id = r.Id,
+                UserId = r.UserId,
+                RoomId = r.RoomId,
+                QtdPeoples = r.QtdPeoples,
+                StartAt = r.StartAt,
+                EndAt = r.EndAt,
+                IsActive = r.IsActive
+            })
+            .ToListAsync();
+
+            return Ok(reservations);
+        }
+
+        [HttpGet("listar_reservas_filtradas")]
+        public async Task<IActionResult> ListFilteredReservations([FromQuery] FilteredReservetionRequisitionDTO requisitionDTO)
+        {
+            if (requisitionDTO.UserId == 0 || requisitionDTO.RoomId == 0)
+            {
+                return BadRequest(new { message = "Informe o usuário e a sala!" });
+            }
+
+            var query = _context.Reservations
+                .AsNoTracking()
+                .AsQueryable();
+
+            query = query.Where(r => r.UserId == requisitionDTO.UserId);
+            query = query.Where(r => r.RoomId == requisitionDTO.RoomId);
+
+            if (requisitionDTO.IsActive != null)
+                query = query.Where(r => r.IsActive == requisitionDTO.IsActive);
+
+            if (requisitionDTO.ReservDate != null)
+            {
+                var date = DateTime.SpecifyKind(requisitionDTO.ReservDate.Value.Date, DateTimeKind.Utc);
+                var nextDay = date.AddDays(1);
+
+                query = query.Where(r => r.StartAt >= date && r.StartAt < nextDay);
+            }
+
+            var reservations = await query
+            .Select(r => new ReservationResponseDTO
+            {
+                Id = r.Id,
+                UserId = r.UserId,
+                RoomId = r.RoomId,
+                QtdPeoples = r.QtdPeoples,
+                StartAt = r.StartAt,
+                EndAt = r.EndAt,
+                IsActive = r.IsActive
+            })
+            .ToListAsync();
+
+            return Ok(reservations);
         }
     }
 }
