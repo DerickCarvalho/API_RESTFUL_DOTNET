@@ -5,8 +5,9 @@ namespace ApiReservas.DTOs.RoomsDTOs
 {
     public class CreateRoomDTO
     {
+        [Required]
         public string RoomName { get; set; }
-        public int CapacityInHours { get; set; }
+        [Required]
         public int PeopleCapacity { get; set; }
     }
 }

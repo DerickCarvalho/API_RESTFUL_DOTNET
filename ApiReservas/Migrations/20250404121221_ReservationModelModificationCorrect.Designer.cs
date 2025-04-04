@@ -3,6 +3,7 @@ using System;
 using ApiReservas.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiReservas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404121221_ReservationModelModificationCorrect")]
+    partial class ReservationModelModificationCorrect
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +102,9 @@ namespace ApiReservas.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CapacityInHours")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PeopleCapacity")
                         .HasColumnType("integer");
 
@@ -154,9 +160,9 @@ namespace ApiReservas.Migrations
                         .IsRequired();
 
                     b.HasOne("ApiReservas.Models.User", "User")
-                        .WithMany("Reservations")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Room");
@@ -165,11 +171,6 @@ namespace ApiReservas.Migrations
                 });
 
             modelBuilder.Entity("ApiReservas.Models.Room", b =>
-                {
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("ApiReservas.Models.User", b =>
                 {
                     b.Navigation("Reservations");
                 });

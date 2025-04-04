@@ -3,6 +3,7 @@ using System;
 using ApiReservas.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiReservas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250403233011_AddRoomReservationsRelation")]
+    partial class AddRoomReservationsRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace ApiReservas.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("ApiReservas.Models.Reservation", b =>
+            modelBuilder.Entity("ApiReservas.Models.Reservations", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,9 +72,6 @@ namespace ApiReservas.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("QtdPeoples")
-                        .HasColumnType("integer");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("integer");
@@ -86,8 +86,6 @@ namespace ApiReservas.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Reservations");
                 });
 
@@ -98,6 +96,9 @@ namespace ApiReservas.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CapacityInHours")
+                        .HasColumnType("integer");
 
                     b.Property<int>("PeopleCapacity")
                         .HasColumnType("integer");
@@ -145,7 +146,7 @@ namespace ApiReservas.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ApiReservas.Models.Reservation", b =>
+            modelBuilder.Entity("ApiReservas.Models.Reservations", b =>
                 {
                     b.HasOne("ApiReservas.Models.Room", "Room")
                         .WithMany("Reservations")
@@ -153,23 +154,10 @@ namespace ApiReservas.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ApiReservas.Models.User", "User")
-                        .WithMany("Reservations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Room");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ApiReservas.Models.Room", b =>
-                {
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("ApiReservas.Models.User", b =>
                 {
                     b.Navigation("Reservations");
                 });

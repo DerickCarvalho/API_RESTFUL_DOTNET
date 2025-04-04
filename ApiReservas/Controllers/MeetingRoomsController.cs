@@ -31,38 +31,29 @@ namespace ApiReservas.Controllers
         [AdminOnly]
         public async Task<IActionResult> CreateMeetRoom(CreateRoomDTO roomDTO)
         {
-            int remainingHours = 24 - DateTime.UtcNow.Hour;
-
             if (roomDTO.PeopleCapacity <= 0)
             {
-                return BadRequest(new { message = $"A sala capacidade de pessoas não pode ser igual ou menor que 0!" });
+                return BadRequest(new { message = $"A capacidade de pessoas não pode ser igual ou menor que 0!" });
             }
 
-            if (roomDTO.CapacityInHours > 0 && roomDTO.CapacityInHours <= remainingHours)
+            var room = new Room
             {
-                var room = new Room
-                {
-                    RoomName = roomDTO.RoomName,
-                    CapacityInHours = roomDTO.CapacityInHours,
-                    PeopleCapacity = roomDTO.PeopleCapacity,
-                    isActive = true,
-                };
+                RoomName = roomDTO.RoomName,
+                PeopleCapacity = roomDTO.PeopleCapacity,
+                isActive = true,
+            };
 
-                var roomExists = await _context.Rooms.FirstOrDefaultAsync(r => r.RoomName == roomDTO.RoomName);
+            var roomExists = await _context.Rooms.FirstOrDefaultAsync(r => r.RoomName == roomDTO.RoomName);
 
-                if (roomExists != null)
-                {
-                    return Conflict(new { message = $"A sala {roomDTO.RoomName} já existe!" });
-                }
-
-                _context.Rooms.Add(room);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Sala criada com sucesso!" });
-            }
-            else
+            if (roomExists != null)
             {
-                return BadRequest(new { message = $"A capacidade de horas informadas não condiz com a data de hoje!" });
+                return Conflict(new { message = $"A sala {roomDTO.RoomName} já existe!" });
             }
+
+            _context.Rooms.Add(room);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Sala criada com sucesso!" });
+            
         }
 
         [HttpPut("editar/{id}")]
@@ -73,31 +64,23 @@ namespace ApiReservas.Controllers
 
             if (roomDTO.PeopleCapacity <= 0)
             {
-                return BadRequest(new { message = $"A sala capacidade de pessoas não pode ser igual ou menor que 0!" });
+                return BadRequest(new { message = $"A capacidade de pessoas não pode ser igual ou menor que 0!" });
             }
 
-            if (roomDTO.CapacityInHours > 0 && roomDTO.CapacityInHours <= remainingHours)
+            var room = await _context.Rooms.FindAsync(id);
+
+            if (room == null)
             {
-                var room = await _context.Rooms.FindAsync(id);
-
-                if (room == null)
-                {
-                    return Conflict(new { message = $"A sala {roomDTO.RoomName} já existe!" });
-                }
-
-                room.RoomName = roomDTO.RoomName;
-                room.CapacityInHours = roomDTO.CapacityInHours;
-                room.PeopleCapacity = roomDTO.PeopleCapacity;
-                room.isActive = roomDTO.IsActive;
-
-                _context.Rooms.Update(room);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Sala editada com sucesso!", roomDTO });
+                return Conflict(new { message = $"A sala {roomDTO.RoomName} já existe!" });
             }
-            else
-            {
-                return BadRequest(new { message = $"A capacidade de horas informadas não condiz com a data de hoje!" });
-            }
+
+            room.RoomName = roomDTO.RoomName;
+            room.PeopleCapacity = roomDTO.PeopleCapacity;
+            room.isActive = roomDTO.IsActive;
+
+            _context.Rooms.Update(room);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Sala editada com sucesso!", roomDTO });
         }
 
         [HttpDelete("inativar/{id}")]
@@ -125,7 +108,6 @@ namespace ApiReservas.Controllers
             {
                 Id = r.Id,
                 RoomName = r.RoomName,
-                CapacityInHours = r.CapacityInHours,
                 IsActive = r.isActive,
                 PeopleCapacity = r.PeopleCapacity
             })
@@ -144,7 +126,6 @@ namespace ApiReservas.Controllers
             {
                 Id = r.Id,
                 RoomName = r.RoomName,
-                CapacityInHours = r.CapacityInHours,
                 IsActive = r.isActive,
                 PeopleCapacity = r.PeopleCapacity
             })
