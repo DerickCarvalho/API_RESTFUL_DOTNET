@@ -76,7 +76,9 @@ namespace ApiReservas.Services
                 .FirstOrDefaultAsync
                 (r =>
                     r.RoomId == reservationDTO.RoomId &&
-                    r.IsActive
+                    r.IsActive &&
+                    r.StartAt < reservationDTO.EndAt &&
+                    r.EndAt > reservationDTO.StartAt
                 );
 
             if (reservation != null)
