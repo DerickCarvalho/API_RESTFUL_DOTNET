@@ -99,7 +99,7 @@ namespace ApiReservas.Services
                 };
             }
 
-            if (reservationDTO.QtdPeoples <= room.PeopleCapacity)
+            if (reservationDTO.QtdPeoples >= room.PeopleCapacity)
             {
                 return new ValidateReserveDTO
                 {
@@ -203,7 +203,7 @@ namespace ApiReservas.Services
                 };
             }
 
-            if (reservationDTO.QtdPeoples > room.PeopleCapacity)
+            if (reservationDTO.QtdPeoples >= room.PeopleCapacity)
             {
                 return new ValidateReserveDTO
                 {
